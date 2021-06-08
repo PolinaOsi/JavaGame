@@ -1,12 +1,20 @@
 package sample;
 
 public class Model {
-    int[][] field = new int[4][4];
-    int Score = 0;
+    private int[][] field = new int[4][4];
+    private int Score = 0;
 
     Model() {
         generateCell();
         generateCell();
+    }
+
+    int GetField(int i, int j) {
+        return field[i][j];
+    }
+
+    int GetScore() {
+        return Score;
     }
 
     void generateCell() {

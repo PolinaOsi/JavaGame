@@ -12,7 +12,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        if (model.GetSize() > 9 || model.GetSize() < 2)
+        if (model.GetSize() > 8 || model.GetSize() < 2)
         {
             System.out.println("Incorrect size!");
             System.exit(-1);

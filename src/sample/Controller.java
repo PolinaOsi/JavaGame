@@ -2,23 +2,17 @@ package sample;
 
 import javafx.scene.input.KeyEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 
 public class Controller implements EventHandler<KeyEvent>{
 
     private View view;
     private Model model;
-    //public Button restartButton;
 
-    public Controller(View view, Model model){
+
+    public Controller(View view, Model model) {
         this.view = view;
         this.model = model;
 
-        /*restartButton = new Button();
-        restartButton.setOnAction(event -> {
-            model.reset();
-            view.showField();
-        });*/
     }
 
     public void setRestartButton() {
@@ -55,9 +49,8 @@ public class Controller implements EventHandler<KeyEvent>{
             view.showField();
 
             if (model.checkGameOver()) {
-                view.gameOverAlert();
-                model.reset();
-                view.showField();
+                view.GetResults();
+
             }
         }
     }

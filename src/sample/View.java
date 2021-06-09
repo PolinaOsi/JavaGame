@@ -11,7 +11,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Alert;
 
-import java.util.Scanner;
 
 public class View {
     Stage window;
@@ -28,12 +27,12 @@ public class View {
         Scene game;
 
         Group root = new Group();
-        Canvas canvas = new Canvas(440, 520);
+        Canvas canvas = new Canvas(1000, 1000);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         root.getChildren().add(canvas);
 
-        for(int i = 0; i < 4; i++)
-            for(int j = 0; j < 4; j++)
+        for(int i = 0; i < model.GetSize(); i++)
+            for(int j = 0; j < model.GetSize(); j++)
             {
                 if(model.GetField(i,j) != 0) {
                     Text temp = new Text(Integer.toString(model.GetField(i,j)));
@@ -82,13 +81,13 @@ public class View {
 
         root.getChildren().addAll(t1, restart);
 
-        game = new Scene(root, 450, 532);
+        game = new Scene(root, 450 * model.GetSize() / 4, 532 * model.GetSize() / 4);
 
         window.setMaxHeight(570);
         window.setMinHeight(570);
         window.setMaxWidth(465);
         window.setMinWidth(465);
-        window.setResizable(false);
+        window.setResizable(true);
         window.setScene(game);
         window.show();
 

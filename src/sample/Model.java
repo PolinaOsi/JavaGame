@@ -72,7 +72,6 @@ public class Model {
                 if(j < size - 1) if(field[i][j] == field[i][j + 1]) return false;
             }
         }
-
         return true;
     }
 

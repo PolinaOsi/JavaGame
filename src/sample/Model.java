@@ -1,13 +1,19 @@
 package sample;
 
+import java.util.Scanner;
+
 public class Model {
-    private int[][] field = new int[4][4];
-    private int Score = 0;
+        Scanner console = new Scanner(System.in);
+        private int size = console.nextInt();
+        private int[][] field = new int[size][size];
+        private int Score = 0;
+
 
     Model() {
         generateCell();
         generateCell();
     }
+
 
     int GetField(int i, int j) {
         return field[i][j];
@@ -17,13 +23,17 @@ public class Model {
         return Score;
     }
 
+    int GetSize() {
+        return size;
+    }
+
     void generateCell() {
-        int i = (int)(Math.random()*4);
-        int j = (int)(Math.random()*4);
+        int i = (int)(Math.random()*size);
+        int j = (int)(Math.random()*size);
 
         while (field[i][j] != 0) {
-            i = (int)(Math.random()*4);
-            j = (int)(Math.random()*4);
+            i = (int)(Math.random()*size);
+            j = (int)(Math.random()*size);
         }
 
         if(Math.random() <= 0.2)
@@ -33,8 +43,8 @@ public class Model {
     }
 
     void reset() {
-        for(int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
+        for(int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 field[i][j] = 0;
             }
         }
@@ -46,20 +56,20 @@ public class Model {
     }
 
     boolean checkGameOver() {
-        for(int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
+        for(int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (field[i][j] == 0) {
                     return false;
                 }
             }
         }
 
-        for(int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
+        for(int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if(i > 0) if(field[i][j] == field[i - 1][j]) return false;
-                if(i < 3) if(field[i][j] == field[i + 1][j]) return false;
+                if(i < size - 1) if(field[i][j] == field[i + 1][j]) return false;
                 if(j > 0) if(field[i][j] == field[i][j - 1]) return false;
-                if(j < 3) if(field[i][j] == field[i][j + 1]) return false;
+                if(j < size - 1) if(field[i][j] == field[i][j + 1]) return false;
             }
         }
 
@@ -68,11 +78,11 @@ public class Model {
 
 
     void up(int haveModified, int newcell) {
-        for(int i = 0; i < 4; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
                 if (field[i][j] != 0) continue;
 
-                for(int jj = j + 1; jj < 4; jj++) {
+                for(int jj = j + 1; jj < size; jj++) {
                     if (field[i][jj] == 0) continue;
 
                     field[i][j] = field[i][jj];
@@ -85,8 +95,8 @@ public class Model {
         }
 
         if(haveModified == 0) {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size - 1; j++) {
                     if (field[i][j] != 0) {
                         if (field[i][j] == field[i][j + 1]) {
                             field[i][j] += field[i][j + 1];
@@ -110,8 +120,8 @@ public class Model {
 
 
     void down(int haveModified, int newcell) {
-        for(int i = 0; i < 4; i++) {
-            for(int j = 3; j >= 0; j--) {
+        for(int i = 0; i < size; i++) {
+            for(int j = size - 1; j >= 0; j--) {
                 if(field[i][j] == 0) {
                     for(int jj = j - 1; jj >= 0; jj--) {
                         if(field[i][jj] != 0) {
@@ -127,8 +137,8 @@ public class Model {
         }
 
         if(haveModified == 0) {
-            for (int i = 0; i < 4; i++) {
-                for(int j = 3; j > 0; j--) {
+            for (int i = 0; i < size; i++) {
+                for(int j = size - 1; j > 0; j--) {
                     if(field[i][j] != 0) {
                         if (field[i][j] == field[i][j - 1]) {
                             field[i][j] += field[i][j - 1];
@@ -152,10 +162,10 @@ public class Model {
 
 
     void left(int haveModified, int newcell) {
-        for(int j = 0; j < 4; j++) {
-            for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < size; j++) {
+            for(int i = 0; i < size; i++) {
                 if(field[i][j] == 0) {
-                    for(int ii = i + 1; ii < 4; ii++) {
+                    for(int ii = i + 1; ii < size; ii++) {
                         if(field[ii][j] != 0) {
                             field[i][j] = field[ii][j];
                             field[ii][j] = 0;
@@ -169,8 +179,8 @@ public class Model {
         }
 
         if(haveModified == 0) {
-            for (int j = 0; j < 4; j++) {
-                for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < size; j++) {
+                for (int i = 0; i < size - 1; i++) {
                     if (field[i][j] != 0) {
                         if (field[i][j] == field[i + 1][j]) {
                             field[i][j] += field[i + 1][j];
@@ -194,8 +204,8 @@ public class Model {
 
 
     void right(int haveModified, int newcell) {
-        for(int j = 0; j < 4; j++) {
-            for(int i = 3; i >= 0; i--) {
+        for(int j = 0; j < size; j++) {
+            for(int i = size - 1; i >= 0; i--) {
                 if(field[i][j] == 0) {
                     for(int ii = i - 1; ii >= 0; ii--) {
                         if(field[ii][j] != 0) {
@@ -211,8 +221,8 @@ public class Model {
         }
 
         if(haveModified == 0) {
-            for (int j = 0; j < 4; j++) {
-                for (int i = 3; i > 0; i--) {
+            for (int j = 0; j < size; j++) {
+                for (int i = size - 1; i > 0; i--) {
                     if (field[i][j] != 0) {
                         if (field[i][j] == field[i - 1][j]) {
                             field[i][j] += field[i - 1][j];
@@ -233,4 +243,5 @@ public class Model {
 
         return;
     }
+
 }

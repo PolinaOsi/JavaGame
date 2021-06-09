@@ -2,6 +2,8 @@ package sample;
 
 import javafx.scene.Scene;
 import javafx.scene.Group;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -11,11 +13,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Alert;
 
+import java.io.*;
+
 
 public class View {
     Stage window;
     Model model;
     Controller controller;
+    Group root;
 
     View(Stage win, Model model) {
         this.model = model;
@@ -23,10 +28,42 @@ public class View {
         window = win;
     }
 
+    void GetResults () {
+        TextField textNameField = new TextField();
+        textNameField.setLayoutX(570);
+        textNameField.setLayoutY(770);
+        textNameField.setPrefColumnCount(11);
+        Button recBut = new Button("CLick to save");
+        recBut.setLayoutX(750);
+        recBut.setLayoutY(750);
+        recBut.setStyle("-fx-background-color: #CC4DFF; -fx-border-width: 1.4; " +
+                "-fx-border-color: #000000; -fx-font-size: 20; -fx-text-fill: #000000; ");
+        recBut.setFont(new Font("Arial",20));
+        recBut.setPrefSize(170, 50);
+        recBut.setOnAction(lam -> {
+            try {
+                FileWriter records = new FileWriter("Record.txt", true);
+                String name = textNameField.getText();
+                records.write("Name: " + name + " Score: " + model.GetScore() + " Size of field: " + model.GetSize() + "x" + model.GetSize() + "\n");
+                records.close();
+                this.gameOverAlert();
+
+                model.reset();
+                this.showField();
+            }
+            catch (IOException err) {
+                err.printStackTrace();
+            }
+            recBut.setOnAction(null);
+        });
+        root.getChildren().add(textNameField);
+        root.getChildren().add(recBut);
+    }
+
     void showField() {
         Scene game;
 
-        Group root = new Group();
+        root = new Group();
         Canvas canvas = new Canvas(1000, 1000);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         root.getChildren().add(canvas);
@@ -81,7 +118,42 @@ public class View {
 
         root.getChildren().addAll(t1, restart);
 
-        game = new Scene(root, 450 * model.GetSize() / 4, 532 * model.GetSize() / 4);
+        game = new Scene(root, 930 , 860 );
+
+        Button records = new Button("Show records");
+        records.setFont(new Font("Arial",20));
+        records.setPrefSize(170, 50);
+        records.setStyle("-fx-background-color: #CC4DFF; -fx-border-width: 1.4; " +
+                "-fx-border-color: #000000; -fx-font-size: 20; -fx-text-fill: #000000; ");
+        records.setLayoutX(750);
+        records.setLayoutY(20);
+        root.getChildren().add(records);
+        records.setOnAction(event -> {
+            String recs = new String();
+            try {
+                File auch = new File("Record.txt");
+                FileReader fr = new FileReader(auch);
+                BufferedReader reader = new BufferedReader(fr);
+                String line = reader.readLine();
+                while (line != null) {
+                    recs = recs.concat(line).concat("\n");
+                    line = reader.readLine();
+                }
+
+            }
+            catch (IOException err) {
+                err.printStackTrace();
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Рекорды");
+            TextArea area = new TextArea(recs);
+            area.setWrapText(true);
+            area.setEditable(false);
+            alert.getDialogPane().setContent(area);
+
+            alert.showAndWait();
+
+        });
 
         window.setMaxHeight(570);
         window.setMinHeight(570);
@@ -92,11 +164,11 @@ public class View {
         window.show();
 
         game.setOnKeyPressed(controller);
+
     }
 
     void gameOverAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
         alert.setTitle("Game over");
         alert.setHeaderText(null);
         alert.setContentText("Final score: " + model.GetScore());

@@ -118,7 +118,7 @@ public class View {
 
         root.getChildren().addAll(t1, restart);
 
-        game = new Scene(root, 930 , 860 );
+        game = new Scene(root, 980 , 960 );
 
         Button records = new Button("Show records");
         records.setFont(new Font("Arial",20));
